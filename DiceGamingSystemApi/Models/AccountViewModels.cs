@@ -24,11 +24,11 @@
 
     public class UserInfoViewModel
     {
+        public string FullName { get; set; }
+
+        public string Username { get; set; }
+
         public string Email { get; set; }
-
-        public bool HasRegistered { get; set; }
-
-        public string LoginProvider { get; set; }
     }
 
     public class UserLoginInfoViewModel

@@ -53,11 +53,12 @@
         {
             ExternalLoginData externalLogin = ExternalLoginData.FromIdentity(User.Identity as ClaimsIdentity);
 
+            var user = this.UserManager.FindByName(User.Identity.GetUserName());
             return new UserInfoViewModel
             {
-                Email = User.Identity.GetUserName(),
-                HasRegistered = externalLogin == null,
-                LoginProvider = externalLogin != null ? externalLogin.LoginProvider : null
+                Email = user.Email,
+                FullName = user.FullName,
+                Username = user.UserName
             };
         }
 
