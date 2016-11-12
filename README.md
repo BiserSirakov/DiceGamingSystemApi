@@ -41,10 +41,27 @@ grant_type = password
   ".issued": "Sat, 12 Nov 2016 19:11:02 GMT",
   ".expires": "Sat, 26 Nov 2016 19:11:02 GMT"
 }
+
+Access token - a token that grants access to a resource.
+Bearer token - a particular type of access token, with the property that anyone can use the token. In other words, a client doesn’t need a cryptographic key or other secret to use a bearer token. For that reason, bearer tokens should only be used over a HTTPS, and should have relatively short expiration times.
+
+Кешираме "access_token" в session storage
 ```
 
+![OAuth2](https://github.com/BiserSirakov/DiceGamingSystemApi/blob/master/oauth07.png)
+
 3. Потребителите могат да се отпишат (logout) от системата.
+
+```
+Потребителят не поставя header - Authentication : bearer "access_token" (Изтриваме/забравяме "access_token" от session storage)
+```
+
 4. Всеки потребител може да достъпи информацията само за своя профил. Виртуалната валута (виж по-долу) не трябва да се връща с профила.
+
+```
+
+```
+
 5. Всеки потребител може да промени данните в своя профил (освен Username). За промяна на парола, е необходимо да се потвърди и старата парола.
 6. Всеки потребител може да изтрие акаунта си. Това действие трябва да изтрие всички данни за потребителя, включително баланса от виртуалната му валута и история на хвърлянията му. Това действие изисква потвърждаване с парола!
 7. Потребителя може да "зареди" акаунта си с произволно количество виртуална валута (цяло положително число).
