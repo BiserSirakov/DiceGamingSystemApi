@@ -9,13 +9,10 @@
     using System.Web;
     using System.Web.Http;
     using Microsoft.AspNet.Identity;
-    using Microsoft.AspNet.Identity.EntityFramework;
     using Microsoft.AspNet.Identity.Owin;
     using Microsoft.Owin.Security;
     using Microsoft.Owin.Security.Cookies;
-    using Microsoft.Owin.Security.OAuth;
     using Models;
-    using Providers;
 
     [Authorize]
     [RoutePrefix("api/Account")]
