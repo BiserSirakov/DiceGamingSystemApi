@@ -28,8 +28,8 @@
                 RequiredLength = 6,
                 RequireNonLetterOrDigit = true,
                 RequireDigit = true,
-                RequireLowercase = true,
-                RequireUppercase = true,
+                RequireLowercase = false,
+                RequireUppercase = false,
             };
 
             var dataProtectionProvider = options.DataProtectionProvider;

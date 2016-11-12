@@ -7,6 +7,8 @@
 
     public class ApplicationUser : IdentityUser
     {
+        public string FullName { get; set; }
+
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager, string authenticationType)
         {
             return await manager.CreateIdentityAsync(this, authenticationType);
