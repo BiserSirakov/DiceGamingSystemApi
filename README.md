@@ -10,16 +10,17 @@
     - FullName
     - Email
 
-    ```
-    POST ~/api/Account/Register
-    Content-Type : application/x-www-form-urlencoded
-    Username = testUsername
-    Password = testPass123!
-    FullName = Test FullName
-    Email = test@test.bg
-    
-    200 OK
-    ```
+```
+POST ~/api/Account/Register
+Content-Type : application/x-www-form-urlencoded
+
+Username = testUsername
+Password = testPass123!
+FullName = Test FullName
+Email = test@test.bg
+
+200 OK
+```
 
 2. Потребителите могат да се впишат (login) в системата. За целта те трябва да въведат своите потребителско име и парола.
 
