@@ -10,24 +10,24 @@
     - FullName
     - Email
 
-```
-POST ~/api/Account/Register
-Content-Type : application/x-www-form-urlencoded
+    ```
+    POST ~/api/Account/Register
+    Content-Type : application/json
+    {
+        "Username" : "testUsername",
+        "Password" : "testPass123",
+        "FullName" : "Test FullName",
+        "Email" : "test@test.bg"
+    }
 
-Username = testUsername
-Password = testPass123!
-FullName = Test FullName
-Email = test@test.bg
-
-200 OK
-```
+    200 OK
+    ```
 
 2. Потребителите могат да се впишат (login) в системата. За целта те трябва да въведат своите потребителско име и парола.
 
 ```
 POST ~/Token
 Content-Type : application/x-www-form-urlencoded
-
 Username = testUsername
 Password = testPass123!
 grant_type = password
@@ -41,12 +41,13 @@ grant_type = password
   ".issued": "Sat, 12 Nov 2016 19:11:02 GMT",
   ".expires": "Sat, 26 Nov 2016 19:11:02 GMT"
 }
+```
 
 Access token - a token that grants access to a resource.
+
 Bearer token - a particular type of access token, with the property that anyone can use the token. In other words, a client doesn’t need a cryptographic key or other secret to use a bearer token. For that reason, bearer tokens should only be used over a HTTPS, and should have relatively short expiration times.
 
 Кешираме "access_token" в session storage
-```
 
 ![OAuth2](https://github.com/BiserSirakov/DiceGamingSystemApi/blob/master/oauth07.png)
 
