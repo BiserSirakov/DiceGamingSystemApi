@@ -131,6 +131,7 @@
     Authorization : bearer "access_token"
 
     100
+	```
 
 9. Всеки потребител може да предизвика хвърляне на два зара със съответно залагане на възможна сума от точките. За целта се изпращат:
     - Bet - каква сума на точките на двата зара очаква да се падне
@@ -139,6 +140,18 @@
     Като резултат трябва да се получи:
     - Идентификатор на хвърлянето
     - Win - количеството спечелена виртуална валута (може да е 0 при загуба)
+	
+	```
+    POST ~/api/Shuffles
+    Authorization : bearer "access_token"
+    Content-Type : application/json
+    {
+		"Value" : "100"
+	}
+
+    201 Created
+    ```
+	
 10. Потребителят може да отмени последното си хвърляне, стига то да е извършено не повече от минута назад във времето, като за това хвръляне не остава запис в системата и всички движения по баланса на играча също се отменят.
 11. Получаване на списък с хвърлянията за потребителя - странициран и с възможност за сортиране по време на хвърлянето по големина на залога (stake) и по спечелената сума валута (win). Да се добави и възможност за показване само на печелившите или губещите хвърляния. Във върнатата информация да се съдържа само време на хвърлянето (timestamp), заложена и спечелена сума.
 12. Достъпване на конкретно хвърляне, като освен посочените в т. 11 данни, се връщат и предвидената и реалната сума от точките на заровете.
@@ -149,5 +162,25 @@
     - Системата хвърля два стандартни шестстенни зара. Въпреки че връща само сумата от точките, тази сума трябва да е разпределена максимално близо до реалното. Случайно число между 2 и 12 не е това, което се търси!
     - Очаква се сами да определите (добре аргументирано) колко да се печели от всяка позната сума от точки. Ако играч познае, че ще се падне 2, трябва да печели повече ако познае, че ще се падне 5. Не забравяйте и печалбата за "къщата".
     
-     
+* Well designed and routed URIs
+* Well designed DTOs
+* Mеtadata in headers
+* Filters/Handlers for metaoperations
+* Response codes & Error codes
+* Controller layer separation (controllers for entity)
+* Business layer (where needed!)
+* Error handling
+* Well designed data model
+* Data layer separation
+* Stable data operations
+* Builds and runs without errors
+* Clean code
+* Optimized operations
+* Correct behavior
+* Demonstration - end2end tests, GUI, SHELL UI, Postman, CURL or any other suitable ways to prove the service is working
+
+Bonus:
+* Idempotent operations (where needed)
+* Deployed to Azure
+
 
