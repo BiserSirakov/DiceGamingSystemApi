@@ -17,7 +17,7 @@
         
         public void ConfigureAuth(IAppBuilder app)
         {
-            app.CreatePerOwinContext(ApplicationDbContext.Create);
+            app.CreatePerOwinContext(DiceGamingSystemApiDbContext.Create);
             app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);
             
             app.UseCookieAuthentication(new CookieAuthenticationOptions());

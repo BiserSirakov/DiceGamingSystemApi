@@ -8,8 +8,8 @@
     {
         public static void Initialize()
         {
-            Database.SetInitializer(new MigrateDatabaseToLatestVersion<ApplicationDbContext, Configuration>());
-            ApplicationDbContext.Create().Database.Initialize(true);
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<DiceGamingSystemApiDbContext, Configuration>());
+            DiceGamingSystemApiDbContext.Create().Database.Initialize(true);
         }
     }
 }

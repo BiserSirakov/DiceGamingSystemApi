@@ -1,4 +1,4 @@
-# Dice Gaming System
+﻿# Dice Gaming System
 Курсова работа за Уеб програмиране с Microsoft Azure и C#.NET, зимен семестър 2016/2017
 
 Задачата е да се изгради система, която да позволява неангажираща игра на зарове за един човек.
@@ -20,7 +20,7 @@
         "Email" : "test@test.bg"
     }
 
-    200 OK
+    201 Created
     ```
 
 2. Потребителите могат да се впишат (login) в системата. За целта те трябва да въведат своите потребителско име и парола.
@@ -29,7 +29,7 @@
     POST ~/Token
     Content-Type : application/x-www-form-urlencoded
     Username = testUsername
-    Password = testPass123!
+    Password = testPass123
     grant_type = password
 
     200 OK
@@ -72,9 +72,66 @@
     ```
 
 5. Всеки потребител може да промени данните в своя профил (освен Username). За промяна на парола, е необходимо да се потвърди и старата парола.
+
+    ```
+    PUT ~/api/Account/ChangeUserInfo
+    Authorization : bearer "access_token"
+    Content-Type : application/json
+    {
+		"Email" : "test2@test.bg",
+		"FullName" : "Test2 FullName"
+	}
+
+    204 No Content
+    ```
+	
+	```
+    PUT ~/api/Account/ChangePassword
+    Authorization : bearer "access_token"
+    Content-Type : application/json
+    {
+		"OldPassword" : "testPass123",
+		"NewPassword" : "pwd",
+		"ConfirmPassword" : "pwd"
+	}
+
+    204 No Content
+    ```
+
 6. Всеки потребител може да изтрие акаунта си. Това действие трябва да изтрие всички данни за потребителя, включително баланса от виртуалната му валута и история на хвърлянията му. Това действие изисква потвърждаване с парола!
+
+	```
+    DELETE ~/api/Account/DeleteUser
+    Authorization : bearer "access_token"
+    Content-Type : application/json
+    {
+		"Password" : "pwd"
+	}
+
+    204 No Content
+    ```
+
 7. Потребителя може да "зареди" акаунта си с произволно количество виртуална валута (цяло положително число).
+
+	```
+    POST ~/api/Currencies
+    Authorization : bearer "access_token"
+    Content-Type : application/json
+    {
+		"Value" : "100"
+	}
+
+    201 Created
+    ```
+
 8. Всеки потребител може да достъпи баланса на виртуалната валута само за своя акаунт.
+
+	```
+    GET ~/api/Currencies/Balance
+    Authorization : bearer "access_token"
+
+    100
+
 9. Всеки потребител може да предизвика хвърляне на два зара със съответно залагане на възможна сума от точките. За целта се изпращат:
     - Bet - каква сума на точките на двата зара очаква да се падне
     - Stake - какво количество виртуална валута залага

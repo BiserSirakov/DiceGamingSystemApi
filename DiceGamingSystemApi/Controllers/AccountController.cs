@@ -14,6 +14,8 @@
     using Microsoft.Owin.Security.Cookies;
     using Models;
     using ViewModels;
+    using DiceGamingSystemApi.ViewModels.User;
+    using System.Net;
 
     [Authorize]
     [RoutePrefix("api/Account")]
@@ -47,7 +49,36 @@
 
         public ISecureDataFormat<AuthenticationTicket> AccessTokenFormat { get; private set; }
 
-        // POST api/Account/ChangeUserInfo
+        // DELETE api/Account/DeleteUser
+        [HttpDelete]
+        public async Task<IHttpActionResult> DeleteUser(ConfirmUserDeleteViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var currentUser = await this.UserManager.FindByIdAsync(User.Identity.GetUserId());
+
+            if (await this.UserManager.CheckPasswordAsync(currentUser, model.Password))
+            {
+                IdentityResult result = await this.UserManager.DeleteAsync(currentUser);
+
+                if (!result.Succeeded)
+                {
+                    return GetErrorResult(result);
+                }
+            }
+            else
+            {
+                return BadRequest("Wrong password.");
+            }
+
+            return StatusCode(HttpStatusCode.NoContent);
+        }
+
+        // PUT api/Account/ChangeUserInfo
+        [HttpPut]
         public async Task<IHttpActionResult> ChangeUserInfo(ChangeUserInfoViewModel model)
         {
             if (!ModelState.IsValid)
@@ -55,31 +86,26 @@
                 return BadRequest(ModelState);
             }
 
+            var currentUser = await this.UserManager.FindByIdAsync(User.Identity.GetUserId());
+            currentUser.FullName = model.FullName;
+
             IdentityResult result = await this.UserManager.SetEmailAsync(User.Identity.GetUserId(), model.Email);
 
-            if (!result.Succeeded)
-            {
-                return GetErrorResult(result);
-            }
-
-            return Ok();
+            return StatusCode(HttpStatusCode.NoContent);
         }
 
         // GET api/Account/UserInfo
-        // [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [Route("UserInfo")]
-        public IHttpActionResult GetUserInfo()
+        public async Task<IHttpActionResult> GetCurrentUserInfo()
         {
-            ExternalLoginData externalLogin = ExternalLoginData.FromIdentity(User.Identity as ClaimsIdentity);
+            var currentUser = await this.UserManager.FindByIdAsync(User.Identity.GetUserId());
 
-            var user = this.UserManager.FindByName(User.Identity.GetUserName());
             return Ok(new UserInfoViewModel
             {
-                Email = user.Email,
-                FullName = user.FullName,
-                Username = user.UserName
+                Email = currentUser.Email,
+                FullName = currentUser.FullName,
+                Username = currentUser.UserName
             });
-            
         }
 
         // POST api/Account/Logout
@@ -90,9 +116,10 @@
             return Ok();
         }
 
-        // POST api/Account/ChangePassword
+        // PUT api/Account/ChangePassword
+        [HttpPut]
         [Route("ChangePassword")]
-        public async Task<IHttpActionResult> ChangePassword(ChangePasswordBindingModel model)
+        public async Task<IHttpActionResult> ChangePassword(ChangePasswordViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -101,61 +128,13 @@
 
             IdentityResult result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword,
                 model.NewPassword);
-            
-            if (!result.Succeeded)
-            {
-                return GetErrorResult(result);
-            }
-
-            return Ok();
-        }
-
-        // POST api/Account/SetPassword
-        [Route("SetPassword")]
-        public async Task<IHttpActionResult> SetPassword(SetPasswordBindingModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            IdentityResult result = await UserManager.AddPasswordAsync(User.Identity.GetUserId(), model.NewPassword);
 
             if (!result.Succeeded)
             {
                 return GetErrorResult(result);
             }
 
-            return Ok();
-        }
-
-        // POST api/Account/RemoveLogin
-        [Route("RemoveLogin")]
-        public async Task<IHttpActionResult> RemoveLogin(RemoveLoginBindingModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            IdentityResult result;
-
-            if (model.LoginProvider == LocalLoginProvider)
-            {
-                result = await UserManager.RemovePasswordAsync(User.Identity.GetUserId());
-            }
-            else
-            {
-                result = await UserManager.RemoveLoginAsync(User.Identity.GetUserId(),
-                    new UserLoginInfo(model.LoginProvider, model.ProviderKey));
-            }
-
-            if (!result.Succeeded)
-            {
-                return GetErrorResult(result);
-            }
-
-            return Ok();
+            return StatusCode(HttpStatusCode.NoContent);
         }
 
         // POST api/Account/Register
@@ -168,7 +147,7 @@
                 return BadRequest(ModelState);
             }
 
-            var user = new ApplicationUser() { UserName = model.Username, Email = model.Email, FullName = model.FullName };
+            var user = new User() { UserName = model.Username, Email = model.Email, FullName = model.FullName };
 
             IdentityResult result = await UserManager.CreateAsync(user, model.Password);
 
@@ -177,7 +156,7 @@
                 return GetErrorResult(result);
             }
 
-            return Ok();
+            return StatusCode(HttpStatusCode.Created);
         }
 
         protected override void Dispose(bool disposing)
