@@ -14,10 +14,12 @@ namespace DiceGamingSystemApi.Models
     public class User : IdentityUser
     {
         private ICollection<Currency> currencies;
+        private ICollection<Shuffle> shuffles;
 
         public User()
         {
             this.currencies = new HashSet<Currency>();
+            this.shuffles = new HashSet<Shuffle>();
         }
 
         [Required]
@@ -28,6 +30,12 @@ namespace DiceGamingSystemApi.Models
         {
             get { return this.currencies; }
             set { this.currencies = value; }
+        }
+
+        public virtual ICollection<Shuffle> Shuffles
+        {
+            get { return this.shuffles; }
+            set { this.shuffles = value; }
         }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<User> manager, string authenticationType)

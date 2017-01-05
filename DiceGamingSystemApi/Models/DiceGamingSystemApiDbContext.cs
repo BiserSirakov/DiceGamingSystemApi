@@ -17,6 +17,8 @@ namespace DiceGamingSystemApi.Models
 
         public IDbSet<Currency> Currencies { get; set; }
 
+        public IDbSet<Shuffle> Shuffles { get; set; }
+
         public static DiceGamingSystemApiDbContext Create()
         {
             return new DiceGamingSystemApiDbContext();

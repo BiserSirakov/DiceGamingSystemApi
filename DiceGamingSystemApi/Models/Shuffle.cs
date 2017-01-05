@@ -16,8 +16,16 @@ namespace DiceGamingSystemApi.Models
 
         public virtual User User { get; set; }
 
+        [Required]
         public int Bet { get; set; }
 
+        [Required]
         public int Stake { get; set; }
+
+        public int Result { get; set; }
+
+        public int Win { get; set; }
+
+        public DateTime Timestamp { get; set; }
     }
 }

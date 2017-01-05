@@ -45,7 +45,7 @@
             db.Currencies.Add(currencyToAdd);
             await db.SaveChangesAsync();
 
-            return StatusCode(HttpStatusCode.Created);
+            return Created("DefaultApi", currencyToAdd);
         }
 
         // GET api/Currencies/Balance

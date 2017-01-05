@@ -156,18 +156,7 @@
                 return GetErrorResult(result);
             }
 
-            return StatusCode(HttpStatusCode.Created);
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && _userManager != null)
-            {
-                _userManager.Dispose();
-                _userManager = null;
-            }
-
-            base.Dispose(disposing);
+            return Created("DefaultApi", new { Id = user.Id, UserName = user.UserName, Email = user.Email, FullName = user.FullName });
         }
 
         #region Helpers
