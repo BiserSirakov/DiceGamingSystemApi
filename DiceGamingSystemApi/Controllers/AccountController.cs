@@ -13,6 +13,7 @@
     using Microsoft.Owin.Security;
     using Microsoft.Owin.Security.Cookies;
     using Models;
+    using ViewModels;
 
     [Authorize]
     [RoutePrefix("api/Account")]
@@ -46,20 +47,39 @@
 
         public ISecureDataFormat<AuthenticationTicket> AccessTokenFormat { get; private set; }
 
+        // POST api/Account/ChangeUserInfo
+        public async Task<IHttpActionResult> ChangeUserInfo(ChangeUserInfoViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            IdentityResult result = await this.UserManager.SetEmailAsync(User.Identity.GetUserId(), model.Email);
+
+            if (!result.Succeeded)
+            {
+                return GetErrorResult(result);
+            }
+
+            return Ok();
+        }
+
         // GET api/Account/UserInfo
-        [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
+        // [HostAuthentication(DefaultAuthenticationTypes.ExternalBearer)]
         [Route("UserInfo")]
-        public UserInfoViewModel GetUserInfo()
+        public IHttpActionResult GetUserInfo()
         {
             ExternalLoginData externalLogin = ExternalLoginData.FromIdentity(User.Identity as ClaimsIdentity);
 
             var user = this.UserManager.FindByName(User.Identity.GetUserName());
-            return new UserInfoViewModel
+            return Ok(new UserInfoViewModel
             {
                 Email = user.Email,
                 FullName = user.FullName,
                 Username = user.UserName
-            };
+            });
+            
         }
 
         // POST api/Account/Logout
