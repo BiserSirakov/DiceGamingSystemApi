@@ -20,7 +20,6 @@ namespace DiceGamingSystemApi.Models
             this.shuffles = new HashSet<Shuffle>();
         }
 
-        [Required]
         [MaxLength(20)]
         public string FullName { get; set; }
 
