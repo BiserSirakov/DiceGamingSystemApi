@@ -13,12 +13,10 @@ namespace DiceGamingSystemApi.Models
 {
     public class User : IdentityUser
     {
-        private ICollection<Currency> currencies;
         private ICollection<Shuffle> shuffles;
 
         public User()
         {
-            this.currencies = new HashSet<Currency>();
             this.shuffles = new HashSet<Shuffle>();
         }
 
@@ -26,11 +24,7 @@ namespace DiceGamingSystemApi.Models
         [MaxLength(20)]
         public string FullName { get; set; }
 
-        public virtual ICollection<Currency> Currencies
-        {
-            get { return this.currencies; }
-            set { this.currencies = value; }
-        }
+        public int VirtualMoney { get; set; }
 
         public virtual ICollection<Shuffle> Shuffles
         {

@@ -14,9 +14,7 @@ namespace DiceGamingSystemApi.Models
             : base("DefaultConnection", throwIfV1Schema: false)
         {
         }
-
-        public IDbSet<Currency> Currencies { get; set; }
-
+        
         public IDbSet<Shuffle> Shuffles { get; set; }
 
         public static DiceGamingSystemApiDbContext Create()

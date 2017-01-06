@@ -49,6 +49,101 @@
 
         public ISecureDataFormat<AuthenticationTicket> AccessTokenFormat { get; private set; }
 
+        // POST api/Account/Register
+        [AllowAnonymous]
+        [Route("Register")]
+        public async Task<IHttpActionResult> Register(RegisterViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = new User
+            {
+                UserName = model.UserName,
+                Email = model.Email,
+                FullName = model.FullName,
+                VirtualMoney = 0
+            };
+
+            IdentityResult result = await UserManager.CreateAsync(user, model.Password);
+
+            if (!result.Succeeded)
+            {
+                return GetErrorResult(result);
+            }
+
+            return Created("DefaultApi", new
+            {
+                Id = user.Id,
+                UserName = user.UserName,
+                Email = user.Email,
+                FullName = user.FullName,
+                VirtualMoney = user.VirtualMoney
+            });
+        }
+
+        // POST api/Account/Logout
+        [Route("Logout")]
+        public IHttpActionResult Logout()
+        {
+            Authentication.SignOut(CookieAuthenticationDefaults.AuthenticationType);
+            return Ok();
+        }
+
+        // GET api/Account/UserInfo
+        [Route("UserInfo")]
+        public async Task<IHttpActionResult> GetCurrentUserInfo()
+        {
+            var currentUser = await this.UserManager.FindByIdAsync(User.Identity.GetUserId());
+
+            return Ok(new UserInfoViewModel
+            {
+                Email = currentUser.Email,
+                FullName = currentUser.FullName,
+                Username = currentUser.UserName
+            });
+        }
+
+        // PUT api/Account/ChangeUserInfo
+        [HttpPut]
+        public async Task<IHttpActionResult> ChangeUserInfo(ChangeUserInfoViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var currentUser = await this.UserManager.FindByIdAsync(User.Identity.GetUserId());
+            currentUser.FullName = model.FullName;
+
+            IdentityResult result = await this.UserManager.SetEmailAsync(User.Identity.GetUserId(), model.Email);
+
+            return StatusCode(HttpStatusCode.NoContent);
+        }
+        
+        // PUT api/Account/ChangePassword
+        [HttpPut]
+        [Route("ChangePassword")]
+        public async Task<IHttpActionResult> ChangePassword(ChangePasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            IdentityResult result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword,
+                model.NewPassword);
+
+            if (!result.Succeeded)
+            {
+                return GetErrorResult(result);
+            }
+
+            return StatusCode(HttpStatusCode.NoContent);
+        }
+
         // DELETE api/Account/DeleteUser
         [HttpDelete]
         public async Task<IHttpActionResult> DeleteUser(ConfirmUserDeleteViewModel model)
@@ -77,9 +172,10 @@
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // PUT api/Account/ChangeUserInfo
+        // PUT api/Account/Wallet
         [HttpPut]
-        public async Task<IHttpActionResult> ChangeUserInfo(ChangeUserInfoViewModel model)
+        [Route("Wallet")]
+        public async Task<IHttpActionResult> Wallet(WalletViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -87,76 +183,26 @@
             }
 
             var currentUser = await this.UserManager.FindByIdAsync(User.Identity.GetUserId());
-            currentUser.FullName = model.FullName;
+            currentUser.VirtualMoney += model.Amount;
 
-            IdentityResult result = await this.UserManager.SetEmailAsync(User.Identity.GetUserId(), model.Email);
+            IdentityResult result = await this.UserManager.UpdateAsync(currentUser);
 
-            return StatusCode(HttpStatusCode.NoContent);
+            if (!result.Succeeded)
+            {
+                return GetErrorResult(result);
+            }
+
+            return Ok(new { VirtualMoney = currentUser.VirtualMoney });
         }
 
-        // GET api/Account/UserInfo
-        [Route("UserInfo")]
-        public async Task<IHttpActionResult> GetCurrentUserInfo()
+        // GET api/Account/Wallet
+        [HttpGet]
+        [Route("Wallet")]
+        public async Task<IHttpActionResult> Wallet()
         {
             var currentUser = await this.UserManager.FindByIdAsync(User.Identity.GetUserId());
 
-            return Ok(new UserInfoViewModel
-            {
-                Email = currentUser.Email,
-                FullName = currentUser.FullName,
-                Username = currentUser.UserName
-            });
-        }
-
-        // POST api/Account/Logout
-        [Route("Logout")]
-        public IHttpActionResult Logout()
-        {
-            Authentication.SignOut(CookieAuthenticationDefaults.AuthenticationType);
-            return Ok();
-        }
-
-        // PUT api/Account/ChangePassword
-        [HttpPut]
-        [Route("ChangePassword")]
-        public async Task<IHttpActionResult> ChangePassword(ChangePasswordViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            IdentityResult result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword,
-                model.NewPassword);
-
-            if (!result.Succeeded)
-            {
-                return GetErrorResult(result);
-            }
-
-            return StatusCode(HttpStatusCode.NoContent);
-        }
-
-        // POST api/Account/Register
-        [AllowAnonymous]
-        [Route("Register")]
-        public async Task<IHttpActionResult> Register(RegisterViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var user = new User() { UserName = model.Username, Email = model.Email, FullName = model.FullName };
-
-            IdentityResult result = await UserManager.CreateAsync(user, model.Password);
-
-            if (!result.Succeeded)
-            {
-                return GetErrorResult(result);
-            }
-
-            return Created("DefaultApi", new { Id = user.Id, UserName = user.UserName, Email = user.Email, FullName = user.FullName });
+            return Ok(new { VirtualMoney = currentUser.VirtualMoney });
         }
 
         #region Helpers
