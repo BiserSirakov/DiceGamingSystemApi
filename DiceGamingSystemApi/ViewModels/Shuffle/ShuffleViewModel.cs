@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace DiceGamingSystemApi.ViewModels.Shuffle
 {
@@ -13,6 +9,6 @@ namespace DiceGamingSystemApi.ViewModels.Shuffle
         public int Bet { get; set; }
 
         [Required]
-        public int Stake { get; set; }
+        public decimal Stake { get; set; }
     }
 }

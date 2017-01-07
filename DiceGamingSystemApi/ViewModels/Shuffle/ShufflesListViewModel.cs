@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace DiceGamingSystemApi.ViewModels.Shuffle
 {
@@ -9,8 +6,8 @@ namespace DiceGamingSystemApi.ViewModels.Shuffle
     {
         public DateTime Timestamp { get; set; }
 
-        public int Stake { get; set; }
+        public decimal Stake { get; set; }
 
-        public int Win { get; set; }
+        public decimal Win { get; set; }
     }
 }

@@ -6,10 +6,12 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
-using DiceGamingSystemApi.Models;
-using DiceGamingSystemApi.ViewModels.Shuffle;
+
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
+
+using DiceGamingSystemApi.Models;
+using DiceGamingSystemApi.ViewModels.Shuffle;
 
 namespace DiceGamingSystemApi.Controllers
 {
@@ -170,8 +172,9 @@ namespace DiceGamingSystemApi.Controllers
             return Ok(result);
         }
 
-        private int CalculateWin(int result, int stake)
+        private decimal CalculateWin(int result, decimal stake)
         {
+            decimal dealerTip = 0;
             int winMultiplier = 1;
 
             // Number of cominations for different results
@@ -210,7 +213,10 @@ namespace DiceGamingSystemApi.Controllers
                     break;
             }
 
-            return stake * winMultiplier;
+            decimal win = stake * winMultiplier;
+            dealerTip = win / 20; // 5% from the win
+
+            return win - dealerTip;
         }
 
         private bool CheckIfDateTimeWithinOneMinute(DateTime dt)

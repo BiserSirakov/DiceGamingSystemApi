@@ -1,8 +1,9 @@
+using System.Data.Entity.Migrations;
+
+using DiceGamingSystemApi.Models;
+
 namespace DiceGamingSystemApi.Migrations
 {
-    using System.Data.Entity.Migrations;
-    using Models;
-
     public sealed class Configuration : DbMigrationsConfiguration<DiceGamingSystemApiDbContext>
     {
         public Configuration()

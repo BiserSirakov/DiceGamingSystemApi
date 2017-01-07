@@ -1,22 +1,23 @@
-﻿namespace DiceGamingSystemApi.Controllers
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Net.Http;
-    using System.Security.Claims;
-    using System.Security.Cryptography;
-    using System.Threading.Tasks;
-    using System.Web;
-    using System.Web.Http;
-    using Microsoft.AspNet.Identity;
-    using Microsoft.AspNet.Identity.Owin;
-    using Microsoft.Owin.Security;
-    using Microsoft.Owin.Security.Cookies;
-    using Models;
-    using ViewModels;
-    using DiceGamingSystemApi.ViewModels.User;
-    using System.Net;
+﻿using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
+using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Threading.Tasks;
+using System.Web;
+using System.Web.Http;
 
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
+using Microsoft.Owin.Security;
+using Microsoft.Owin.Security.Cookies;
+
+using DiceGamingSystemApi.ViewModels.User;
+using DiceGamingSystemApi.Models;
+
+namespace DiceGamingSystemApi.Controllers
+{
     [Authorize]
     [RoutePrefix("api/Account")]
     public class AccountController : ApiController
@@ -183,6 +184,7 @@
             }
 
             var currentUser = await this.UserManager.FindByIdAsync(User.Identity.GetUserId());
+
             currentUser.VirtualMoney += model.Amount;
 
             IdentityResult result = await this.UserManager.UpdateAsync(currentUser);

@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using System.Web;
 
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
-using System.ComponentModel.DataAnnotations;
 
 namespace DiceGamingSystemApi.Models
 {
@@ -23,7 +20,7 @@ namespace DiceGamingSystemApi.Models
         [MaxLength(20)]
         public string FullName { get; set; }
 
-        public int VirtualMoney { get; set; }
+        public decimal VirtualMoney { get; set; }
 
         public virtual ICollection<Shuffle> Shuffles
         {

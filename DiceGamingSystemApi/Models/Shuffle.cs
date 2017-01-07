@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 
 namespace DiceGamingSystemApi.Models
 {
@@ -20,11 +17,11 @@ namespace DiceGamingSystemApi.Models
         public int Bet { get; set; }
 
         [Required]
-        public int Stake { get; set; }
+        public decimal Stake { get; set; }
 
         public int Result { get; set; }
 
-        public int Win { get; set; }
+        public decimal Win { get; set; }
 
         public DateTime Timestamp { get; set; }
     }
